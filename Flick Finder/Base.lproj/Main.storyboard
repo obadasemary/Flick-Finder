@@ -1,25 +1,191 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Flick_Finder" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="yeo-R6-5EF">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flick Finder" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EdP-zX-pII">
+                                <rect key="frame" x="226" y="28" width="148" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="eI4-FH-A19"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="27"/>
+                                <color key="textColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-3g-7uQ" userLabel="Search Container">
+                                <rect key="frame" x="20" y="326" width="560" height="254"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Phrase" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="izO-hz-2X9" userLabel="Phrase Text Field">
+                                        <rect key="frame" x="8" y="18" width="488" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gis-6w-9t2" userLabel="SearchByPhraseButton">
+                                        <rect key="frame" x="504" y="9" width="48" height="48"/>
+                                        <accessibility key="accessibilityConfiguration" label=""/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="48" id="eIb-CK-RqB"/>
+                                            <constraint firstAttribute="height" constant="48" id="yWW-YI-zaK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <state key="normal" image="Search">
+                                            <color key="titleColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="searchPhotosByPhraseButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XhC-HV-t8t"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Latitude" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MvR-eJ-2NT" userLabel="Lat Label">
+                                        <rect key="frame" x="80" y="119" width="92" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="l94-md-MXv"/>
+                                            <constraint firstAttribute="width" constant="92" id="lSf-Gb-6Im"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="20"/>
+                                        <color key="textColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Latitude" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PNl-pR-na5" userLabel="Lat Text Field">
+                                        <rect key="frame" x="8" y="81" width="236" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Longitude" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="4qb-TI-WvF" userLabel="Lon Text Field">
+                                        <rect key="frame" x="260" y="81" width="236" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z31-Rd-e4E" userLabel="SearchByLatLonButton">
+                                        <rect key="frame" x="504" y="72" width="48" height="48"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="48" id="eZc-9v-Ojt"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <state key="normal" image="Search">
+                                            <color key="titleColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="searchPhotosByLatLonButtonTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SWK-bN-g90"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Longitude" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LeI-UI-fRu" userLabel="Lon Label">
+                                        <rect key="frame" x="314" y="122" width="128" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="128" id="L5O-q7-xTF"/>
+                                            <constraint firstAttribute="height" constant="31" id="myd-Ds-m7G"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="20"/>
+                                        <color key="textColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5At-65-sog" userLabel="Photo Title Label">
+                                        <rect key="frame" x="0.0" y="161" width="560" height="85"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="85" id="qyM-qG-YRa"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <color key="textColor" red="1" green="0.34415794399999999" blue="0.50067574319999997" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Z31-Rd-e4E" firstAttribute="trailing" secondItem="HT1-3g-7uQ" secondAttribute="trailingMargin" id="6qV-oU-Ra6"/>
+                                    <constraint firstItem="PNl-pR-na5" firstAttribute="leading" secondItem="izO-hz-2X9" secondAttribute="leading" id="6wd-sO-4Gh"/>
+                                    <constraint firstItem="4qb-TI-WvF" firstAttribute="leading" secondItem="PNl-pR-na5" secondAttribute="trailing" constant="16" id="9Ix-3M-G37"/>
+                                    <constraint firstItem="4qb-TI-WvF" firstAttribute="width" secondItem="PNl-pR-na5" secondAttribute="width" id="Bim-yX-kj4"/>
+                                    <constraint firstItem="Z31-Rd-e4E" firstAttribute="centerY" secondItem="4qb-TI-WvF" secondAttribute="centerY" id="CdL-yA-0EX"/>
+                                    <constraint firstItem="gis-6w-9t2" firstAttribute="top" secondItem="HT1-3g-7uQ" secondAttribute="top" constant="9" id="Eze-f1-njG"/>
+                                    <constraint firstItem="Z31-Rd-e4E" firstAttribute="leading" secondItem="4qb-TI-WvF" secondAttribute="trailing" constant="8" symbolic="YES" id="GL4-Id-2Qt"/>
+                                    <constraint firstItem="izO-hz-2X9" firstAttribute="centerY" secondItem="gis-6w-9t2" secondAttribute="centerY" id="KD7-Us-zd2"/>
+                                    <constraint firstItem="gis-6w-9t2" firstAttribute="trailing" secondItem="Z31-Rd-e4E" secondAttribute="trailing" id="LuB-Oi-nS2"/>
+                                    <constraint firstItem="MvR-eJ-2NT" firstAttribute="top" secondItem="PNl-pR-na5" secondAttribute="bottom" constant="8" symbolic="YES" id="M55-Bv-bfD"/>
+                                    <constraint firstAttribute="trailing" secondItem="5At-65-sog" secondAttribute="trailing" id="PRb-rP-bfw"/>
+                                    <constraint firstItem="5At-65-sog" firstAttribute="top" secondItem="MvR-eJ-2NT" secondAttribute="bottom" constant="8" symbolic="YES" id="Rxk-9h-puy"/>
+                                    <constraint firstItem="Z31-Rd-e4E" firstAttribute="top" secondItem="gis-6w-9t2" secondAttribute="bottom" constant="15" id="TH2-Rg-xwa"/>
+                                    <constraint firstItem="4qb-TI-WvF" firstAttribute="bottom" secondItem="PNl-pR-na5" secondAttribute="bottom" id="URM-bT-ebq"/>
+                                    <constraint firstItem="MvR-eJ-2NT" firstAttribute="centerX" secondItem="PNl-pR-na5" secondAttribute="centerX" id="YGR-HN-k6W"/>
+                                    <constraint firstItem="LeI-UI-fRu" firstAttribute="centerX" secondItem="4qb-TI-WvF" secondAttribute="centerX" id="dBy-eQ-BSd"/>
+                                    <constraint firstItem="5At-65-sog" firstAttribute="leading" secondItem="HT1-3g-7uQ" secondAttribute="leading" id="eD5-N6-B1l"/>
+                                    <constraint firstItem="PNl-pR-na5" firstAttribute="leading" secondItem="HT1-3g-7uQ" secondAttribute="leadingMargin" id="hhb-Rd-3qs"/>
+                                    <constraint firstItem="Z31-Rd-e4E" firstAttribute="leading" secondItem="gis-6w-9t2" secondAttribute="leading" id="obN-7o-cNy"/>
+                                    <constraint firstItem="LeI-UI-fRu" firstAttribute="top" secondItem="4qb-TI-WvF" secondAttribute="bottom" constant="11" id="pOW-s2-YHX"/>
+                                    <constraint firstItem="gis-6w-9t2" firstAttribute="leading" secondItem="izO-hz-2X9" secondAttribute="trailing" constant="8" symbolic="YES" id="pjt-h7-zH0"/>
+                                    <constraint firstItem="MvR-eJ-2NT" firstAttribute="centerX" secondItem="PNl-pR-na5" secondAttribute="centerX" id="ww5-Gk-kiM"/>
+                                    <constraint firstItem="LeI-UI-fRu" firstAttribute="baseline" secondItem="MvR-eJ-2NT" secondAttribute="firstBaseline" constant="10" id="yHS-OX-RbW"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A6I-UO-cVd" userLabel="Photo View Container">
+                                <rect key="frame" x="20" y="68" width="560" height="250"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search and Find a Flick!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s73-G9-YBx" userLabel="Default Label">
+                                        <rect key="frame" x="175" y="113" width="211" height="24"/>
+                                        <fontDescription key="fontDescription" type="italicSystem" pointSize="20"/>
+                                        <color key="textColor" red="0.96470588239999999" green="0.66274509800000003" blue="0.14901960780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JpL-3X-ESg" userLabel="Photo Image View">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="250"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="JpL-3X-ESg" secondAttribute="width" id="1zh-rv-dRV"/>
+                                    <constraint firstItem="s73-G9-YBx" firstAttribute="centerY" secondItem="JpL-3X-ESg" secondAttribute="centerY" constant="-0.5" id="2UF-hs-RUf"/>
+                                    <constraint firstAttribute="centerX" secondItem="JpL-3X-ESg" secondAttribute="centerX" id="IaM-uB-kYm"/>
+                                    <constraint firstAttribute="centerY" secondItem="JpL-3X-ESg" secondAttribute="centerY" id="aKf-fa-Ysm"/>
+                                    <constraint firstAttribute="height" secondItem="JpL-3X-ESg" secondAttribute="height" id="bR9-Kl-gU0"/>
+                                    <constraint firstItem="s73-G9-YBx" firstAttribute="centerX" secondItem="JpL-3X-ESg" secondAttribute="centerX" id="tjt-gW-awf"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.066666666669999999" green="0.59999999999999998" blue="0.76470588240000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="HT1-3g-7uQ" firstAttribute="leading" secondItem="yeo-R6-5EF" secondAttribute="leadingMargin" id="6PB-E6-0dY"/>
+                            <constraint firstItem="A6I-UO-cVd" firstAttribute="trailing" secondItem="yeo-R6-5EF" secondAttribute="trailingMargin" id="9ad-ZI-B7H"/>
+                            <constraint firstItem="A6I-UO-cVd" firstAttribute="leading" secondItem="HT1-3g-7uQ" secondAttribute="leading" id="EWA-hN-NDV"/>
+                            <constraint firstItem="A6I-UO-cVd" firstAttribute="centerX" secondItem="EdP-zX-pII" secondAttribute="centerX" id="KXB-9z-UYJ"/>
+                            <constraint firstAttribute="bottom" secondItem="A6I-UO-cVd" secondAttribute="bottom" constant="282" id="fxO-uX-t7C"/>
+                            <constraint firstAttribute="bottom" secondItem="HT1-3g-7uQ" secondAttribute="bottom" constant="20" symbolic="YES" id="iDR-ui-EaE"/>
+                            <constraint firstItem="A6I-UO-cVd" firstAttribute="top" secondItem="EdP-zX-pII" secondAttribute="bottom" constant="8" symbolic="YES" id="jnu-Xo-s3z"/>
+                            <constraint firstItem="HT1-3g-7uQ" firstAttribute="top" secondItem="A6I-UO-cVd" secondAttribute="bottom" constant="8" symbolic="YES" id="v42-Uq-JOQ"/>
+                            <constraint firstItem="A6I-UO-cVd" firstAttribute="trailing" secondItem="HT1-3g-7uQ" secondAttribute="trailing" id="v4t-5e-Dde"/>
+                            <constraint firstItem="EdP-zX-pII" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="wob-Es-keQ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="defaultLabel" destination="s73-G9-YBx" id="c01-AI-JRb"/>
+                        <outlet property="latitudeTextField" destination="PNl-pR-na5" id="zUb-3O-HyJ"/>
+                        <outlet property="longitudeTextField" destination="4qb-TI-WvF" id="DVM-4V-jfe"/>
+                        <outlet property="photoImageView" destination="JpL-3X-ESg" id="RF8-JJ-zXA"/>
+                        <outlet property="photoTitleLabel" destination="5At-65-sog" id="6W2-8e-NYu"/>
+                        <outlet property="phraseTextField" destination="izO-hz-2X9" id="0aa-bQ-WUa"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="526" y="359"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Search" width="32" height="32"/>
+    </resources>
 </document>

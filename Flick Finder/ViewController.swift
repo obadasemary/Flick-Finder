@@ -145,19 +145,20 @@ class ViewController: UIViewController {
                 /* 7.6 - Update the UI on the main thread */
                 if let imageData = NSData(contentsOfURL: imageURL!) {
                     dispatch_async(dispatch_get_main_queue(), {
-                        print("Success, update the UI here...")
-                        print(photoTitle)
-                        print(imageData)
+                        self.defaultLabel.alpha = 0.0
+                        self.photoImageView.image = UIImage(data: imageData)
+                        self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
                     })
                 } else {
                     print("Image does not exist at \(imageURL)")
                 }
             } else {
                 dispatch_async(dispatch_get_main_queue(), {
-                    print("No Photos Found. Search Again.")
+                    self.photoTitleLabel.text = "No Photos Found. Search Again."
+                    self.defaultLabel.alpha = 1.0
+                    self.photoImageView.image = nil
                 })
             }
-
         }
         
         task.resume()

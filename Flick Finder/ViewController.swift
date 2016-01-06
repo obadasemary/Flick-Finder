@@ -103,13 +103,61 @@ class ViewController: UIViewController {
                 return
             }
 
+            /* 7 - Grab Photo */
+            /* 7.1 - Get the photos dictionary */
             /* GUARD: Is "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
 
+            /* 7.2 - Determine the total number of photos */
+            /* GUARD: Is the "total" key in photosDictionary? */
+            guard let totalPhotos = (photosDictionary["total"] as? NSString)?.integerValue else {
+                print("Cannot find key 'total' in \(photosDictionary)")
+                return
+            }
             
+            /* 7.3 - If photos are returned, let's grab one! */
+            if totalPhotos > 0 {
+                
+                /* GUARD: Is the "photo" key in photosDictionary? */
+                guard let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] else {
+                    print("Cannot find key 'photo' in \(photosDictionary)")
+                    return
+                }
+                
+                /* 7.4 - Get a random index, and pick a random photo's dictionary */
+                let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+                let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
+                
+                /* 7.5 - Prepare the UI updates */
+                let photoTitle = photoDictionary["title"] as? String /* non-fatal */
+                
+                /* GUARD: Does our photo have a key for 'url_m'? */
+                guard let imageUrlString = photoDictionary["url_m"] as? String else {
+                    print("Cannot find key 'url_m' in \(photoDictionary)")
+                    return
+                }
+                
+                let imageURL = NSURL(string: imageUrlString)
+                
+                /* 7.6 - Update the UI on the main thread */
+                if let imageData = NSData(contentsOfURL: imageURL!) {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        print("Success, update the UI here...")
+                        print(photoTitle)
+                        print(imageData)
+                    })
+                } else {
+                    print("Image does not exist at \(imageURL)")
+                }
+            } else {
+                dispatch_async(dispatch_get_main_queue(), {
+                    print("No Photos Found. Search Again.")
+                })
+            }
+
         }
         
         task.resume()

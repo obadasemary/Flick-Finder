@@ -29,6 +29,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var longitudeTextField: UITextField!
 
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
+        
         /* 1 - Hardcode the arguments */
         let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
@@ -86,7 +87,7 @@ class ViewController: UIViewController {
                 return
             }
 
-            /* Parse the data! */
+            /* 6 - Parse the data (i.e. convert the data to JSON and look for values!) */
             let parsedResult: AnyObject!
             do {
                 parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
@@ -101,22 +102,13 @@ class ViewController: UIViewController {
                 print("Flickr API returned an error. See error code and message in \(parsedResult)")
                 return
             }
-            
+
             /* GUARD: Is "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
 
-            print(data)
-            print("\n************************************************************************************************************\n")
-            print(response)
-            print("\n************************************************************************************************************\n")
-            print(parsedResult)
-            print("\n************************************************************************************************************\n")
-            print(stat)
-            print("\n************************************************************************************************************\n")
-            print(photosDictionary)
             
         }
         

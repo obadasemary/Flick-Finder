@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - Globals
+
 let BASE_URL = "https://api.flickr.com/services/rest/"
 let METHOD_NAME = "flickr.photos.search"
 //let API_KEY = "8162cbed138466b501453381c1ce5bc9"
@@ -20,6 +22,7 @@ let NO_JSON_CALLBACK = "1"
 
 class ViewController: UIViewController {
 
+    // MARK: Properties
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var photoTitleLabel: UILabel!
@@ -27,14 +30,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var phraseTextField: UITextField!
     @IBOutlet weak var latitudeTextField: UITextField!
     @IBOutlet weak var longitudeTextField: UITextField!
-
+    
+    var tapRecognizer: UITapGestureRecognizer? = nil
+    
+    // MARK: Actions
+    
     @IBAction func searchPhotosByPhraseButtonTouchUp(sender: AnyObject) {
+        
+        /* hides keyboard after searching */
+        self.dismissAnyVisibleKeyboards()
         
         /* 1 - Hardcode the arguments */
         let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
-            "text": "realmadrid",
+            "text": self.phraseTextField.text,
             "safe_search": SAFE_SEARCH,
             "extras": EXTRAS,
             "format": DATA_FORMAT,
@@ -45,7 +55,87 @@ class ViewController: UIViewController {
     }
     
     @IBAction func searchPhotosByLatLonButtonTouchUp(sender: AnyObject) {
+        
+        /* hides keyboard after searching */
+        self.dismissAnyVisibleKeyboards()
+        
+        print("Will implement this function in a later step...")
+    }
     
+    // MARK: Life Cycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+        tapRecognizer?.numberOfTapsRequired = 1
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        /* Add tap recognizer to dismiss keyboard */
+        self.addKeyboardDismissRecognizer()
+        
+        /* Subscribe to keyboard events so we can adjust the view to show hidden controls */
+        self.subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        /* Remove tap recognizer */
+        self.removeKeyboardDismissRecognizer()
+        
+        /* Unsubscribe to all keyboard events */
+        self.unsubscribeToKeyboardNotifications()
+    }
+    
+    // MARK: Show/Hide Keyboard
+    
+    func addKeyboardDismissRecognizer() {
+        self.view.addGestureRecognizer(tapRecognizer!)
+    }
+    
+    func removeKeyboardDismissRecognizer() {
+        self.view.removeGestureRecognizer(tapRecognizer!)
+    }
+    
+    func handleSingleTap(recognizer: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    func subscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func unsubscribeToKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if self.photoImageView.image != nil {
+            self.defaultLabel.alpha = 0.0
+        }
+        if self.view.frame.origin.y == 0.0 {
+            self.view.frame.origin.y -= self.getKeyboardHeight(notification) / 2
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if self.photoImageView.image == nil {
+            self.defaultLabel.alpha = 1.0
+        }
+        if self.view.frame.origin.y != 0.0 {
+            self.view.frame.origin.y += self.getKeyboardHeight(notification) / 2
+        }
+    }
+    
+    func getKeyboardHeight(notification: NSNotification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.CGRectValue().height
     }
     
     // MARK: Flickr API
@@ -187,3 +277,11 @@ class ViewController: UIViewController {
     }
 }
 
+// MARK: - ViewController (Keyboard Fix)
+extension ViewController {
+    func dismissAnyVisibleKeyboards() {
+        if phraseTextField.isFirstResponder() || latitudeTextField.isFirstResponder() || longitudeTextField.isFirstResponder() {
+            self.view.endEditing(true)
+        }
+    }
+}

@@ -170,6 +170,13 @@ class ViewController: UIViewController {
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
     
+    func getLatLonString() ->String {
+        let latitude = (self.latitudeTextField.text! as NSString).doubleValue
+        let longitude = (self.longitudeTextField.text! as NSString).doubleValue
+        
+        return "(\(latitude), \(longitude))"
+    }
+    
     // MARK: Flickr API
     
     func getImageFromFlickrBySearch(methodArguments: [String : AnyObject]) {
@@ -232,7 +239,76 @@ class ViewController: UIViewController {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
-
+            
+            guard let totalPages = photosDictionary["pages"] as? Int else {
+                print("Cannot find key 'pages' in \(photosDictionary)")
+                return
+            }
+            
+            let pageLimit = min(totalPages, 40)
+            let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+            self.getImageFromFlickrBySearchWithPage(methodArguments, pageNumber: randomPage)
+            
+        }
+        
+        task.resume()
+    }
+    
+    func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int) {
+        
+        var withPageDictionary = methodArguments
+        withPageDictionary["page"] = pageNumber
+        
+        let session = NSURLSession.sharedSession()
+        let urlString = BASE_URL + escapedParameters(methodArguments)
+        let url = NSURL(string: urlString)!
+        let request = NSURLRequest(URL: url)
+        
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            guard (error == nil) else {
+                print("There was an error with your request: \(error)")
+                return
+            }
+            
+            /* GUARD: Did we get a successful 2XX response? */
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                if let response = response as? NSHTTPURLResponse {
+                    print("Your request returned an invalid response! Status code: \(response.statusCode)!")
+                } else if let response = response {
+                    print("Your request returned an invalid response! Response: \(response)!")
+                } else {
+                    print("Your request returned an invalid response!")
+                }
+                return
+            }
+            
+            /* GUARD: Was there any data returned? */
+            guard let data = data else {
+                print("No data was returned by the request!")
+                return
+            }
+            
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                parsedResult = nil
+                print("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            /* GUARD: Did Flickr return an error? */
+            guard let stat = parsedResult["stat"] as? String where stat == "ok" else {
+                print("Flickr API returned an error. See error code and message in \(parsedResult)")
+                return
+            }
+            
+            guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
+                print("Cannot find keys 'photos' in \(parsedResult)")
+                return
+            }
+            
             /* 7.2 - Determine the total number of photos */
             /* GUARD: Is the "total" key in photosDictionary? */
             guard let totalPhotos = (photosDictionary["total"] as? NSString)?.integerValue else {
@@ -263,13 +339,21 @@ class ViewController: UIViewController {
                 }
                 
                 let imageURL = NSURL(string: imageUrlString)
-                
-                /* 7.6 - Update the UI on the main thread */
                 if let imageData = NSData(contentsOfURL: imageURL!) {
                     dispatch_async(dispatch_get_main_queue(), {
+                        
                         self.defaultLabel.alpha = 0.0
                         self.photoImageView.image = UIImage(data: imageData)
-                        self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+                        
+                        if methodArguments["bbox"] != nil {
+                            if let photoTitle = photoTitle {
+                                self.photoTitleLabel.text = "\(self.getLatLonString()) \(photoTitle)"
+                            } else {
+                                self.photoTitleLabel.text = "\(self.getLatLonString()) (Untitled)"
+                            }
+                        } else {
+                            self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+                        }
                     })
                 } else {
                     print("Image does not exist at \(imageURL)")

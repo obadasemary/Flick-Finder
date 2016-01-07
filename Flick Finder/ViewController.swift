@@ -12,13 +12,17 @@ import UIKit
 
 let BASE_URL = "https://api.flickr.com/services/rest/"
 let METHOD_NAME = "flickr.photos.search"
-//let API_KEY = "8162cbed138466b501453381c1ce5bc9"
-//let API_KEY = "ce190e05b11ca689a9clfac8c9de619d"
 let API_KEY = "7ec0be775569078cb3893cccf909019f"
 let EXTRAS = "url_m"
 let SAFE_SEARCH = "1"
 let DATA_FORMAT = "json"
 let NO_JSON_CALLBACK = "1"
+let BOUNDING_BOX_HALF_WIDTH = 1.0
+let BOUNDING_BOX_HALF_HEIGHT = 1.0
+let LAT_MIN = -90.0
+let LAT_MAX = 90.0
+let LON_MIN = -180.0
+let LON_MAX = 180.0
 
 class ViewController: UIViewController {
 
@@ -40,7 +44,7 @@ class ViewController: UIViewController {
         /* hides keyboard after searching */
         self.dismissAnyVisibleKeyboards()
         
-        /* 1 - Hardcode the arguments */
+        /* Hardcode the arguments */
         let methodArguments: [String: String!] = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
@@ -50,7 +54,7 @@ class ViewController: UIViewController {
             "format": DATA_FORMAT,
             "nojsoncallback": NO_JSON_CALLBACK
         ]
-        /* 2 - Call the Flickr API with these arguments */
+        /* Call the Flickr API with these arguments */
         getImageFromFlickrBySearch(methodArguments)
     }
     
@@ -58,8 +62,19 @@ class ViewController: UIViewController {
         
         /* hides keyboard after searching */
         self.dismissAnyVisibleKeyboards()
-        
-        print("Will implement this function in a later step...")
+
+        /* Hardcode the arguments */
+        let methodArguments = [
+            "method": METHOD_NAME,
+            "api_key": API_KEY,
+            "text": createBoundingBoxString(),
+            "safe_search": SAFE_SEARCH,
+            "extras": EXTRAS,
+            "format": DATA_FORMAT,
+            "nojsoncallback": NO_JSON_CALLBACK
+        ]
+        /* Call the Flickr API with these arguments */
+        getImageFromFlickrBySearch(methodArguments)
     }
     
     // MARK: Life Cycle
@@ -136,6 +151,23 @@ class ViewController: UIViewController {
         let userInfo = notification.userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
         return keyboardSize.CGRectValue().height
+    }
+
+    // MARK: Lat/Lon Manipulation
+    
+    func createBoundingBoxString() -> String {
+        
+        let latitude = (self.latitudeTextField.text! as  NSString).doubleValue
+        let longitude = (self.longitudeTextField.text! as NSString).doubleValue
+        
+        /* Fix added to ensure box is bounded by minimum and maximums */
+        let bottom_left_lon = max(longitude - BOUNDING_BOX_HALF_WIDTH, LON_MIN)
+        let bottom_left_lat = max(latitude - BOUNDING_BOX_HALF_HEIGHT, LAT_MIN)
+        
+        let top_right_lon = min(longitude + BOUNDING_BOX_HALF_WIDTH, LON_MAX)
+        let top_right_lat = min(latitude + BOUNDING_BOX_HALF_HEIGHT, LAT_MAX)
+        
+        return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
     
     // MARK: Flickr API

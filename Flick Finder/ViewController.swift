@@ -32,6 +32,8 @@ extension String {
     }
 }
 
+// MARK: - ViewController: UIViewController
+
 class ViewController: UIViewController {
 
     // MARK: Properties
@@ -54,7 +56,6 @@ class ViewController: UIViewController {
         
         if !self.phraseTextField.text!.isEmpty {
             self.photoTitleLabel.text = "Searching..."
-            /* Hardcode the arguments */
             let methodArguments: [String: String!] = [
                 "method": METHOD_NAME,
                 "api_key": API_KEY,
@@ -200,7 +201,8 @@ class ViewController: UIViewController {
         
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
-    
+
+    /* Check to make sure the latitude falls within [-90, 90] */
     func validLatitude() -> Bool {
         if let latitude: Double? = self.latitudeTextField.text!.toDouble() {
             if latitude < LAT_MIN || latitude > LAT_MAX {
@@ -212,6 +214,7 @@ class ViewController: UIViewController {
         return true
     }
     
+    /* Check to make sure the longitude falls within [-180, 180] */
     func validLongitude() -> Bool {
         if let longitude: Double? = self.longitudeTextField.text!.toDouble() {
             if longitude < LON_MIN || longitude > LON_MAX {
@@ -232,17 +235,18 @@ class ViewController: UIViewController {
     
     // MARK: Flickr API
     
+    /* Function makes first request to get a random page, then it makes a request to get an image with the random page */
     func getImageFromFlickrBySearch(methodArguments: [String : AnyObject]) {
         
-        /* 3 - Get the shared NSURLSession to faciliate network activity */
+        /* Get the shared NSURLSession to faciliate network activity */
         let session = NSURLSession.sharedSession()
         
-        /* 4 - Create the NSURLRequest using properly escaped URL */
+        /* Create the NSURLRequest using properly escaped URL */
         let urlString = BASE_URL + escapedParameters(methodArguments)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
 
-        /* 5 - Create NSURLSessionDataTask and completion handler */
+        /* Create NSURLSessionDataTask and completion handler */
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
             /* GUARD: Was there an error? */
@@ -269,7 +273,7 @@ class ViewController: UIViewController {
                 return
             }
 
-            /* 6 - Parse the data (i.e. convert the data to JSON and look for values!) */
+            /* Parse the data */
             let parsedResult: AnyObject!
             do {
                 parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
@@ -285,19 +289,21 @@ class ViewController: UIViewController {
                 return
             }
 
-            /* 7 - Grab Photo */
-            /* 7.1 - Get the photos dictionary */
+            /* Grab Photo */
+            /* Get the photos dictionary */
             /* GUARD: Is "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
             
+            /* GUARD: Is "pages" key in the photosDictionary? */
             guard let totalPages = photosDictionary["pages"] as? Int else {
                 print("Cannot find key 'pages' in \(photosDictionary)")
                 return
             }
             
+            /* Pick a random page! */
             let pageLimit = min(totalPages, 40)
             let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
             self.getImageFromFlickrBySearchWithPage(methodArguments, pageNumber: randomPage)
@@ -307,8 +313,10 @@ class ViewController: UIViewController {
         task.resume()
     }
     
+    /* getImageFromFlickrBySearchWithPage */
     func getImageFromFlickrBySearchWithPage(methodArguments: [String : AnyObject], pageNumber: Int) {
         
+        /* Add the page to the method's arguments */
         var withPageDictionary = methodArguments
         withPageDictionary["page"] = pageNumber
         
@@ -319,6 +327,7 @@ class ViewController: UIViewController {
         
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
+            /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
                 return
@@ -342,6 +351,7 @@ class ViewController: UIViewController {
                 return
             }
             
+            /* Parse the data! */
             let parsedResult: AnyObject!
             do {
                 parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
@@ -357,19 +367,20 @@ class ViewController: UIViewController {
                 return
             }
             
+            /* GUARD: Is the "photos" key in our result? */
             guard let photosDictionary = parsedResult["photos"] as? NSDictionary else {
                 print("Cannot find keys 'photos' in \(parsedResult)")
                 return
             }
             
-            /* 7.2 - Determine the total number of photos */
+            /* Determine the total number of photos */
             /* GUARD: Is the "total" key in photosDictionary? */
             guard let totalPhotos = (photosDictionary["total"] as? NSString)?.integerValue else {
                 print("Cannot find key 'total' in \(photosDictionary)")
                 return
             }
             
-            /* 7.3 - If photos are returned, let's grab one! */
+            /* If photos are returned, let's grab one! */
             if totalPhotos > 0 {
                 
                 /* GUARD: Is the "photo" key in photosDictionary? */
@@ -378,11 +389,11 @@ class ViewController: UIViewController {
                     return
                 }
                 
-                /* 7.4 - Get a random index, and pick a random photo's dictionary */
+                /* Get a random index, and pick a random photo's dictionary */
                 let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                 let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
                 
-                /* 7.5 - Prepare the UI updates */
+                /* Prepare the UI updates */
                 let photoTitle = photoDictionary["title"] as? String /* non-fatal */
                 
                 /* GUARD: Does our photo have a key for 'url_m'? */
